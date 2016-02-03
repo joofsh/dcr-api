@@ -10,6 +10,10 @@ module CRUDHelpers
     json klass[object.id].present
   end
 
+  def whitelist!(attrs, *fields)
+    attrs.keep_if { |k, _v| fields.include?(k.to_sym) }
+  end
+
   def paginated(name, dataset, length = 10)
     length = params[:length] || length
     start = params[:start] || 0

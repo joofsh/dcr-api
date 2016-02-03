@@ -1,14 +1,23 @@
 class UserRoutes < EhrApiBase
 
+  post '/authorize' do
+    user = User.authenticate(params[:identifier], params[:password]) || forbidden!
+    token = Token.find_or_create(user.id)
+
+    json user: user.present(params).merge({
+      token: token.value
+    })
+  end
+
   namespace('/users') do
-    #before { authenticate! }
+    before { authenticate! }
 
     get do
-      json paginated(:users, User)
+      json paginated(:users, current_user.users_dataset)
     end
 
     post do
-      create! User, params[:user]
+      create! User, user_attributes
     end
 
     get '/:id' do
@@ -22,13 +31,10 @@ class UserRoutes < EhrApiBase
     end
   end
 
-  post '/users/authorize' do
-    user = User.authenticate(params[:identifier], params[:password]) || forbidden!
-    token = Token.find_or_create(user.id)
-
-    json user.present(params).merge({
-      token: token.value
-    })
+  def user_attributes
+    user = params[:user] || bad_request!
+    whitelist!(user, :first_name, :last_name, :role, :advocate_id, :birthdate, :gender,
+              :sexual_orientation, :phone, :email, :username, :hive_postiive, :language)
   end
 end
 

@@ -27,7 +27,7 @@ namespace :db do
   end
 
   desc 'kills all connections to postgres db'
-  task :kill_postgres_connections do#=> [:environment] do
+  task :kill_postgres_connections do
     cmd = %(psql -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'ehr';" -d 'ehr')
 
     unless system(cmd)
@@ -49,7 +49,7 @@ namespace :db do
 
   desc "create the database"
   task :create => [:environment] do
-    DB.disconnect
+    #DB.disconnect
     #DB << "CREATE DATABASE #{DB_NAME} CHARACTER SET utf8;"
     cmd = %(createdb '#{DB_NAME}')
 
@@ -60,10 +60,23 @@ namespace :db do
   end
 
   task :reset => [:environment] do
+    #Rake::Task['db:kill_postgres_connections'].execute
     Rake::Task['db:drop'].execute
     Rake::Task['db:create'].execute
     Rake::Task['db:migrate'].execute
+    Rake::Task['db:test_users'].execute
 
-    User.create(username: 'joofsh', email: 'foo@bar.com', role: 'admin', password: 'foobar')
+  end
+
+  task :test_users => [:environment] do
+    puts 'Creating test users'
+    User.create(first_name: 'JD', last_name: 'Pagano', username: 'joofsh_admin', email: 'jonathanpagano+1@gmail.com', role: 'admin', password: 'foobar')
+
+    a = Advocate.create(first_name: 'JD', last_name: 'Pagano', username: 'joofsh', email: 'jonathanpagano@gmail.com', password: 'foobar')
+    5.times do |i|
+      Client.create(first_name: 'John', last_name: 'Doe', birthdate: (Date.today - i), advocate_id: a.id)
+    end
+
+    puts 'Complete'
   end
 end

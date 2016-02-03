@@ -29,6 +29,9 @@ class EhrApiBase < Sinatra::Base
   include AuthHelpers
   include CRUDHelpers
   include HaltHelpers
+
+rescue => e
+  p e
 end
 
 Dir['./routes/**/*.rb'].each { |file| require file }

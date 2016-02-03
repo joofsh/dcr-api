@@ -17,4 +17,8 @@ module AuthHelpers
       params['token']
     end
   end
+
+  def current_user
+    @current_user
+  end
 end
