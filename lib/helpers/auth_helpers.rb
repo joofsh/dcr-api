@@ -4,9 +4,10 @@ module AuthHelpers
     @current_user = User[token.user_id] || forbidden!
   end
 
-  def verify_current_user_or_staff(user)
+  def verify_current_user_or_staff!(user)
     @current_user.is_staff? ||
-      user.id == @current_user.id
+      user.id == @current_user.id ||
+      forbidden!
   end
 
   def token_value

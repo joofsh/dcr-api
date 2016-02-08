@@ -21,20 +21,23 @@ class UserRoutes < EhrApiBase
     end
 
     get '/:id' do
-      user = User[params[:id]] || not_found!
+      user = User[params[:id].to_i] || not_found!
       json user.present(params)
     end
 
     put '/:id' do
-      user = User[params[:id]] || not_found!
+      user = User[params[:id].to_i] || not_found!
       verify_current_user_or_staff!(user)
+
+      update! user, user_attributes, User
     end
   end
 
   def user_attributes
     user = params[:user] || bad_request!
     whitelist!(user, :first_name, :last_name, :role, :advocate_id, :birthdate, :gender,
-              :sexual_orientation, :phone, :email, :username, :hive_postiive, :language)
+               :sexual_orientation, :phone, :email, :username, :hive_postiive, :language,
+               :race)
   end
 end
 
