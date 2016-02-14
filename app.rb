@@ -38,4 +38,5 @@ Dir['./routes/**/*.rb'].each { |file| require file }
 
 class EhrApiV1 < EhrApiBase
   use UserRoutes
+  use ResourceRoutes
 end

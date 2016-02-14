@@ -64,17 +64,20 @@ namespace :db do
     Rake::Task['db:drop'].execute
     Rake::Task['db:create'].execute
     Rake::Task['db:migrate'].execute
-    Rake::Task['db:test_users'].execute
+    Rake::Task['db:test_data'].execute
 
   end
 
-  task :test_users => [:environment] do
-    puts 'Creating test users'
+  task :test_data => [:environment] do
+    puts 'Creating test data'
     User.create(first_name: 'JD', last_name: 'Pagano', username: 'joofsh_admin', email: 'jonathanpagano+1@gmail.com', role: 'admin', password: 'foobar')
 
     a = Advocate.create(first_name: 'JD', last_name: 'Pagano', username: 'joofsh', email: 'jonathanpagano@gmail.com', password: 'foobar')
     5.times do |i|
       Client.create(first_name: 'John', last_name: 'Doe', birthdate: (Date.today - i), advocate_id: a.id)
+    end
+    10.times do |r|
+      Resource.create(title: "Dummy Resource ##{r}", url: 'http://google.com')
     end
 
     puts 'Complete'

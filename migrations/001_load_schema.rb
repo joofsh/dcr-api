@@ -2,23 +2,23 @@ Sequel.migration do
   change do
     create_table :users do
       primary_key :id
-      String :username, size: 255, unique: true
-      String :email, size: 255, unique: true
-      String :first_name, size: 255, null: false
-      String :last_name, size: 255, null: false
+      String :username, unique: true
+      String :email, unique: true
+      String :first_name, null: false
+      String :last_name, null: false
 
-      String :phone, size: 255
-      String :gender, size: 255
-      String :sexual_orientation, size: 255
-      String :language, size: 255
-      String :race, size: 255
+      String :phone
+      String :gender
+      String :sexual_orientation
+      String :language
+      String :race
       Boolean :hiv_positive, default: false
       Date :birthdate
 
-      String :crypted_password, size: 192, null: true
+      String :crypted_password, null: true
 
       # for STI
-      String :role, size: 255, null: false
+      String :role, null: false
 
       Integer :advocate_id
 
@@ -31,11 +31,14 @@ Sequel.migration do
     create_table :addresses do
       primary_key :id
 
-      String :address, size: 255
-      String :address_2, size: 255
-      String :city, size: 255
-      String :state, size: 255
-      String :zipcode, size: 255
+      String :address
+      String :address_2
+      String :city
+      String :state
+      String :zipcode
+
+      DateTime :created_at
+      DateTime :updated_at
     end
 
     create_table :questions do
@@ -43,16 +46,20 @@ Sequel.migration do
 
       Integer :order
       String :stem, null: false
+      DateTime :created_at
+      DateTime :updated_at
     end
 
     create_table :choices do
       primary_key :id
 
-      String :stem, size: 255
-      String :attribute, size: 255
-      String :attribute_value, size: 255
+      String :stem
+      String :attribute
+      String :attribute_value
       Integer :question_id
       Integer :next_question_id
+      DateTime :created_at
+      DateTime :updated_at
     end
 
     create_table :responses do
@@ -60,17 +67,58 @@ Sequel.migration do
 
       Integer :choice_id
       Integer :user_id
+      DateTime :created_at
+      DateTime :updated_at
     end
 
 
 
     create_table :tokens do
-
-      String :value, size: 255, null: false, unique: true
-      Integer :user_id, size: 255, null: false, unique: true
-      String :type, size: 255, null: false
+      String :value, null: false, unique: true
+      Integer :user_id, null: false, unique: true
+      String :type, null: false
+      DateTime :created_at
+      DateTime :updated_at
 
       primary_key [:value]
+    end
+
+    create_table :tags do
+      primary_key :id
+      String :name, null: false, unique: true
+      Float :weight
+      DateTime :created_at
+      DateTime :updated_at
+
+      index :name, unique: true
+    end
+
+    create_table :resources do
+      primary_key :id
+      String :operating_hours
+      String :phone
+      String :title, null: false
+      String :url
+      String :image_url
+      DateTime :created_at
+      DateTime :updated_at
+    end
+
+    create_table :tags_users do
+      Integer :tag_id, null: false
+      Integer :user_id, null: false
+      DateTime :created_at
+      DateTime :updated_at
+      primary_key [:tag_id, :user_id]
+    end
+
+    create_table :tags_resources do
+      Integer :tag_id, null: false
+      Integer :resource_id, null: false
+      DateTime :created_at
+      DateTime :updated_at
+
+      primary_key [:tag_id, :resource_id]
     end
   end
 end
