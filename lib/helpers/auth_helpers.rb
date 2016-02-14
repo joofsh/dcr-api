@@ -10,6 +10,10 @@ module AuthHelpers
       forbidden!
   end
 
+  def verify_staff!
+    @current_user.is_staff?
+  end
+
   def token_value
     if auth_info = env["HTTP_AUTHORIZATION"]
       auth_type, auth_data =  auth_info.split(' ', 2)
