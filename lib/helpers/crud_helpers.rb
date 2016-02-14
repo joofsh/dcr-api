@@ -10,7 +10,7 @@ module CRUDHelpers
     json klass[object.id].present
   end
 
-  def update!(object, attributes, klass)
+  def update!(object, attributes, klass = nil)
     object.set attributes
 
     unprocessable_entity!(object.errors) unless object.save
