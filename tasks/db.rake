@@ -69,17 +69,10 @@ namespace :db do
   end
 
   task :test_data => [:environment] do
+    require './dummy_data'
+
     puts 'Creating test data'
-    User.create(first_name: 'JD', last_name: 'Pagano', username: 'joofsh_admin', email: 'jonathanpagano+1@gmail.com', role: 'admin', password: 'foobar')
-
-    a = Advocate.create(first_name: 'JD', last_name: 'Pagano', username: 'joofsh', email: 'jonathanpagano@gmail.com', password: 'foobar')
-    5.times do |i|
-      Client.create(first_name: 'John', last_name: 'Doe', birthdate: (Date.today - i), advocate_id: a.id)
-    end
-    10.times do |r|
-      Resource.create(title: "Dummy Resource ##{r}", url: 'http://google.com')
-    end
-
+    build_dummy_data
     puts 'Complete'
   end
 end
