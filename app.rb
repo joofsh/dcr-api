@@ -25,13 +25,11 @@ Dir['./models/**/*.rb'].each { |file| require file }
 
 class EhrApiBase < Sinatra::Base
   use Rack::PostBodyContentTypeParser
+  use Rack::MethodOverride
   register Sinatra::Namespace
   include AuthHelpers
   include CRUDHelpers
   include HaltHelpers
-
-rescue => e
-  p e
 end
 
 Dir['./routes/**/*.rb'].each { |file| require file }
@@ -39,4 +37,5 @@ Dir['./routes/**/*.rb'].each { |file| require file }
 class EhrApiV1 < EhrApiBase
   use UserRoutes
   use ResourceRoutes
+  use ClientRoutes
 end

@@ -1,0 +1,19 @@
+class Tag < Sequel::Model
+
+  many_to_many :users
+  many_to_many :resources
+
+  def self.find_or_create(tag_name)
+    require'pry';binding.pry 
+    self.where(name: tag_name).first || self.create(name: tag_name)
+  end
+
+  def before_validation
+    self.weight ||= 0.5
+  end
+
+  def validate
+    validates_presence [:name, :weight]
+    validates_unique :name
+  end
+end

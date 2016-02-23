@@ -46,4 +46,24 @@ module CRUDHelpers
       start: start.to_i,
     }
   end
+
+  def rename_nested_attributes!(key_name, attrs, parent_class, parent_id, *fields)
+    if attrs.key? key_name
+      if parent = parent_class[parent_id]
+        existing_obj = parent.send(key_name)
+      end
+
+      # delete existing content if nil is sent
+      if attrs[key_name].nil?
+        if existing_obj
+          attrs["#{key_name}_attributes".to_sym] = { id: existing_obj.id, _delete: true }
+        end
+        attrs.delete key_name
+      else
+        whitelisted_attrs = whitelist! attrs.delete(key_name), *fields
+        whitelisted_attrs[:id] = existing_obj.id if existing_obj
+        attrs["#{key_name}_attributes".to_sym] = whitelisted_attrs
+      end
+    end
+  end
 end

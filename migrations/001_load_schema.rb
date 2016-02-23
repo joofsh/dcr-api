@@ -1,5 +1,18 @@
 Sequel.migration do
   change do
+    create_table :addresses do
+      primary_key :id
+
+      String :street
+      String :street_2
+      String :city
+      String :state
+      String :zipcode
+
+      DateTime :created_at
+      DateTime :updated_at
+    end
+
     create_table :users do
       primary_key :id
       String :username, unique: true
@@ -20,7 +33,9 @@ Sequel.migration do
       # for STI
       String :role, null: false
 
-      Integer :advocate_id
+      foreign_key :advocate_id, :users, deferrable: true
+      foreign_key :mailing_address_id, :addresses, deferrable: true
+      foreign_key :home_address_id, :addresses, deferrable: true
 
       DateTime :created_at
       DateTime :updated_at
@@ -28,17 +43,37 @@ Sequel.migration do
       index [:email]
     end
 
-    create_table :addresses do
-      primary_key :id
+    create_table :tokens do
+      String :value, null: false, unique: true
+      Integer :user_id, null: false, unique: true
+      String :type, null: false
+      DateTime :created_at
+      DateTime :updated_at
 
-      String :address
-      String :address_2
-      String :city
-      String :state
-      String :zipcode
+      primary_key [:value]
+    end
+
+    create_table :resources do
+      primary_key :id
+      String :operating_hours
+      String :phone
+      String :title, null: false
+      String :url
+      String :image_url
+      foreign_key :address_id, :addresses, deferrable: true
 
       DateTime :created_at
       DateTime :updated_at
+    end
+
+    create_table :tags do
+      primary_key :id
+      String :name, null: false, unique: true
+      Float :weight
+      DateTime :created_at
+      DateTime :updated_at
+
+      index :name, unique: true
     end
 
     create_table :questions do
@@ -54,10 +89,10 @@ Sequel.migration do
       primary_key :id
 
       String :stem
-      String :attribute
-      String :attribute_value
-      Integer :question_id
-      Integer :next_question_id
+      foreign_key :tag_id, :tags, deferrable: true
+      foreign_key :question_id, :questions, deferrable: true
+      foreign_key :next_question_id, :questions, deferrable: true
+
       DateTime :created_at
       DateTime :updated_at
     end
@@ -65,56 +100,25 @@ Sequel.migration do
     create_table :responses do
       primary_key :id
 
-      Integer :choice_id
-      Integer :user_id
-      DateTime :created_at
-      DateTime :updated_at
-    end
+      foreign_key :choice_id, :choices, deferrable: true
+      foreign_key :question_id, :questions, deferrable: true
+      foreign_key :client_id, :users, deferrable: true
 
-
-
-    create_table :tokens do
-      String :value, null: false, unique: true
-      Integer :user_id, null: false, unique: true
-      String :type, null: false
-      DateTime :created_at
-      DateTime :updated_at
-
-      primary_key [:value]
-    end
-
-    create_table :tags do
-      primary_key :id
-      String :name, null: false, unique: true
-      Float :weight
-      DateTime :created_at
-      DateTime :updated_at
-
-      index :name, unique: true
-    end
-
-    create_table :resources do
-      primary_key :id
-      String :operating_hours
-      String :phone
-      String :title, null: false
-      String :url
-      String :image_url
       DateTime :created_at
       DateTime :updated_at
     end
 
     create_table :tags_users do
-      Integer :tag_id, null: false
-      Integer :user_id, null: false
+      foreign_key :tag_id, null: false
+      foreign_key :user_id, null: false
       DateTime :created_at
       DateTime :updated_at
       primary_key [:tag_id, :user_id]
     end
 
-    create_table :tags_resources do
-      Integer :tag_id, null: false
-      Integer :resource_id, null: false
+    create_table :resources_tags do
+      foreign_key :tag_id, null: false
+      foreign_key :resource_id, null: false
       DateTime :created_at
       DateTime :updated_at
 

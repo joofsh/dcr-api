@@ -34,10 +34,16 @@ class UserRoutes < EhrApiBase
   end
 
   def user_attributes
-    user = params[:user] || bad_request!
-    whitelist!(user, :first_name, :last_name, :role, :advocate_id, :birthdate, :gender,
+    attrs = params[:user] || bad_request!
+    whitelist!(attrs, :first_name, :last_name, :role, :advocate_id, :birthdate, :gender,
                :sexual_orientation, :phone, :email, :username, :hive_postiive, :language,
-               :race)
+               :race, :mailing_address, :home_address)
+
+    rename_nested_attributes!('mailing_address', attrs, User, params[:id],
+                              :street, :street_2, :city, :state, :zipcode)
+    rename_nested_attributes!('home_address', attrs, User, params[:id],
+                              :street, :street_2, :city, :state, :zipcode)
+    attrs
   end
 end
 

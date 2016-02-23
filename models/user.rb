@@ -1,11 +1,12 @@
 require 'digest/md5'
 
 class User < Sequel::Model
+  plugin :nested_attributes
   include Shield::Model
 
   hidden_fields :crypted_password
   blacklisted_fields :crypted_password
-  presented_methods :name, :image_url
+  presented_methods :name, :image_url, :mailing_address, :home_address
 
   plugin :single_table_inheritance,
     :role,
@@ -14,6 +15,15 @@ class User < Sequel::Model
       'advocate' => :Advocate,
       'admin' => :Admin
     }
+
+  many_to_many :tags, order: Sequel.desc(:weight)
+  many_to_one :mailing_address, class: :Address
+  many_to_one :home_address, class: :Address
+
+  nested_attributes :mailing_address, :home_address
+
+  add_association_dependencies mailing_address: :destroy,
+                               home_address:    :destroy
 
   def self.fetch(identifier)
     self[identifier.to_i] ||

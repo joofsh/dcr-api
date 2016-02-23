@@ -24,7 +24,9 @@ class Sequel::Model
     end
 
     _presented_methods.each do |method|
-      obj[method] = self.send(method) rescue nil
+      value = self.send(method) rescue nil
+      value = value.present if value.class < Sequel::Model
+      obj[method] = value
     end
 
     obj
