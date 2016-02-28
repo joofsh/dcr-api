@@ -29,10 +29,14 @@ class Sequel::Model
       obj[method] = value
     end
 
-    obj
+    obj.merge(extend_present)
   end
 
   private
+
+  def extend_present
+    {}
+  end
 
   def _presented_methods
     self.class.presented_methods + self.class.superclass.presented_methods

@@ -4,7 +4,6 @@ class Tag < Sequel::Model
   many_to_many :resources
 
   def self.find_or_create(tag_name)
-    require'pry';binding.pry 
     self.where(name: tag_name).first || self.create(name: tag_name)
   end
 
