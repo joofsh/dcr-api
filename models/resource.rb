@@ -5,8 +5,13 @@ class Resource < Sequel::Model
   many_to_one :address
 
   nested_attributes :address
-  presented_methods :address, :tags
+  presented_methods :address
 
   add_association_dependencies address: :destroy
 
+  def extend_present
+    {
+      tags: tags.map(&:name)
+    }
+  end
 end

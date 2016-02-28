@@ -62,4 +62,10 @@ class User < Sequel::Model
     validates_unique :username, :email
   end
 
+  def extend_present
+    {
+      tags: tags.map(&:name)
+    }
+  end
+
 end
