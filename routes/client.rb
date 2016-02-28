@@ -38,4 +38,3 @@ class ClientRoutes < EhrApiBase
 
   end
 end
-

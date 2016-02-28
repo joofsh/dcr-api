@@ -29,7 +29,23 @@ class UserRoutes < EhrApiBase
       user = User[params[:id].to_i] || not_found!
       verify_current_user_or_staff!(user)
 
-      update! user, user_attributes, User
+      tags = user_attributes.delete('tags') || []
+      DB.transaction do
+        # validate current tags
+        user.tags.each do |tag|
+          unless tags.include? tag.name
+            user.remove_tag tag
+          end
+        end
+
+        # Add new tags
+        tags.each do |tag|
+          _tag = Tag.find_or_create(tag)
+          user.add_tag _tag unless user.tags.include?(_tag)
+        end
+
+        update! user, user_attributes, User
+      end
     end
   end
 
@@ -37,7 +53,7 @@ class UserRoutes < EhrApiBase
     attrs = params[:user] || bad_request!
     whitelist!(attrs, :first_name, :last_name, :role, :advocate_id, :birthdate, :gender,
                :sexual_orientation, :phone, :email, :username, :hive_postiive, :language,
-               :race, :mailing_address, :home_address)
+               :race, :mailing_address, :home_address, :tags)
 
     rename_nested_attributes!('mailing_address', attrs, User, params[:id],
                               :street, :street_2, :city, :state, :zipcode)
