@@ -8,6 +8,7 @@ gem 'pg'
 gem 'dotenv'
 gem 'shield'
 gem 'puma'
+gem 'rake'
 
 # debugging
 group :development do
