@@ -1,6 +1,6 @@
 namespace :db do
   task :environment do
-    require './app'
+    require_relative '../app'
     Sequel.extension :migration
 
     DB_NAME = ENV["API_DB_NAME"]
