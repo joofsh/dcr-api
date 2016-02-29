@@ -39,4 +39,5 @@ class EhrApiV1 < EhrApiBase
   use ResourceRoutes
   use ClientRoutes
   use TagRoutes
+  use ConfigRoutes
 end
