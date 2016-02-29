@@ -11,8 +11,6 @@ GEM
     debug_inspector (0.0.2)
     dotenv (2.0.2)
     git-version-bump (0.15.1)
-    haml (4.0.7)
-      tilt
     method_source (0.8.2)
     multi_json (1.11.2)
     pg (0.18.4)
@@ -26,6 +24,7 @@ GEM
     pry-stack_explorer (0.4.9.2)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
+    puma (3.0.2)
     rack (1.6.4)
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
@@ -59,11 +58,11 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   dotenv
-  haml
   pg
   pry
   pry-byebug
   pry-stack_explorer
+  puma
   rack-contrib
   sequel
   shield
@@ -72,4 +71,4 @@ DEPENDENCIES
   sinatra-contrib
 
 BUNDLED WITH
-   1.10.6
+   1.11.2

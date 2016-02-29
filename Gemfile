@@ -4,10 +4,10 @@ gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'rack-contrib'
 gem 'sequel'
-gem 'haml'
 gem 'pg'
 gem 'dotenv'
 gem 'shield'
+gem 'puma'
 
 # debugging
 group :development do
