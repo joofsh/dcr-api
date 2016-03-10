@@ -6,7 +6,7 @@ class User < Sequel::Model
 
   hidden_fields :crypted_password
   blacklisted_fields :crypted_password
-  presented_methods :name, :image_url, :mailing_address, :home_address
+  presented_methods :name, :image_url, :mailing_address, :home_address, :staff
 
   plugin :single_table_inheritance,
     :role,
@@ -37,6 +37,10 @@ class User < Sequel::Model
 
   def is_staff?
     false
+  end
+
+  def staff
+    is_staff?
   end
 
   def name

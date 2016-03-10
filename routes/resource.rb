@@ -1,18 +1,17 @@
 class ResourceRoutes < EhrApiBase
   namespace('/resources') do
-    before { authenticate! }
-
     get do
       json paginated(:resources, Resource.dataset)
-    end
-
-    post do
-      create! Resource, resource_attributes
     end
 
     get '/:id' do
       resource = Resource[params[:id].to_i] || not_found!
       json resource.present(params)
+    end
+
+    post do
+      verify_staff!
+      create! Resource, resource_attributes
     end
 
     put '/:id' do
