@@ -9,14 +9,22 @@ Sequel::Model.plugin :association_dependencies
 Sequel::Model.raise_on_save_failure = false
 Sequel.default_timezone = :utc
 
+def database_name
+  db_name = ENV['API_DB_NAME']
+  db_name += '_test' if test?
+  db_name
+end
+
 DB_CONFIG = {
   adapter:  ENV['API_DB_ADAPTER'],
   host:      ENV['API_DB_HOST'],
-  database:  ENV['API_DB_NAME'],
+  database:  database_name,
   user:      ENV['API_DB_USER'],
   password:  ENV['API_DB_PASSWORD'],
   servers: {}
 }
 
 DB ||= Sequel.connect(DB_CONFIG)
+
+DB.extension :null_dataset
 

@@ -4,6 +4,10 @@ class Client < User
   many_to_one :advocate, class: :Advocate
   one_to_many :responses
 
+  def users_dataset
+    User.dataset.nullify
+  end
+
   # TODO: Refactor this. Needs to become a lot more sophisticated
   # and faster.
   def resources

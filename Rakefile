@@ -7,6 +7,14 @@ task :server do
 
 end
 
+task :test do
+  run "test/**/*_test.rb"
+end
+
 task :console do
   exec 'pry -r ./app'
+end
+
+def run(dir)
+  Dir[dir].each { |file| load file }
 end

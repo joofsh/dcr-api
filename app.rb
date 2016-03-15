@@ -9,6 +9,10 @@ def development?
   ENV['RACK_ENV'] == 'development'
 end
 
+def test?
+  ENV['RACK_ENV'] == 'test'
+end
+
 require 'dotenv'
 Dotenv.load
 

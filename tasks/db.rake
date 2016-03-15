@@ -1,3 +1,11 @@
+def silence_warnings(&block)
+  warn_level = $VERBOSE
+  $VERBOSE = nil
+  result = block.call
+  $VERBOSE = warn_level
+  result
+end
+
 namespace :db do
   task :environment do
     require_relative '../app'
@@ -8,12 +16,21 @@ namespace :db do
 
   desc "performs db migration up to latest available"
   task :migrate, [:verison] => [:environment] do |t, args|
-    if args[:version]
-      Sequel::Migrator.run(DB, "migrations", target: args[:version].to_i)
-    else
-      Sequel::Migrator.run(DB, "migrations")
+    ['development', 'test'].each do |env|
+      ENV['RACK_ENV'] = env
+
+      silence_warnings do
+        DB_CONFIG[:database] = database_name
+        DB = Sequel.connect(DB_CONFIG)
+      end
+
+      if args[:version]
+        Sequel::Migrator.run(DB, "migrations", target: args[:version].to_i)
+      else
+        Sequel::Migrator.run(DB, "migrations")
+      end
+      Rake::Task['db:version'].execute
     end
-    Rake::Task['db:version'].execute
   end
 
   desc "print db version"

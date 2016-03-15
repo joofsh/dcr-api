@@ -10,7 +10,6 @@ class ResourceRoutes < EhrApiBase
     end
 
     post do
-      verify_staff!
       create! Resource, resource_attributes
     end
 

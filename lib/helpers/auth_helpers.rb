@@ -11,7 +11,7 @@ module AuthHelpers
   end
 
   def verify_staff!
-    authenciate!
+    authenticate!
     @current_user.is_staff?
   end
 
