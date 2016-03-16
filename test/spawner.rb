@@ -38,3 +38,24 @@ class Tag
     self.name ||= "fun_tag_#{random_id}"
   end
 end
+
+class Question
+  def before_spawn
+    self.stem ||= "This is the question stem"
+  end
+end
+
+class Choice
+  def before_spawn
+    self.stem ||= "This is the choice stem"
+    self.question ||= Question.spawn!
+  end
+end
+
+class Response
+  def before_spawn
+    self.client ||= Client.spawn!
+    self.choice ||= Choice.spawn!
+    self.question = self.choice.question
+  end
+end

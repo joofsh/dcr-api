@@ -3,7 +3,7 @@ class ClientRoutes < EhrApiBase
     authenticate!
 
     r.on ':id' do |client_id|
-      get 'questions' do
+      r.get 'questions' do
         client = Client[client_id] || not_found!
 
         {
@@ -14,6 +14,7 @@ class ClientRoutes < EhrApiBase
 
       r.get 'resources' do
         client = Client[client_id] || not_found!
+        verify_current_user_or_staff!(client)
 
         {
           client: client.present(params),
@@ -23,6 +24,8 @@ class ClientRoutes < EhrApiBase
 
       r.put 'responses' do
         client = Client[client_id] || not_found!
+        verify_current_user_or_staff!(client)
+
         choice = Choice[params[:choice_id]] || not_found!
 
         response = Response.create_or_update(client.id, choice.question_id, choice.id)
@@ -32,7 +35,7 @@ class ClientRoutes < EhrApiBase
         end
 
         {
-          next_question: choice.next_question.present,
+          next_question: choice.next_question && choice.next_question.present,
           response: response.present
         }
       end
