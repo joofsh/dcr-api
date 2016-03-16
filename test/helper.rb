@@ -30,7 +30,7 @@ class MiniTest::Spec
   include Rack::Test::Methods
 
   def app
-    EhrApiV1
+    EhrAPI
   end
 
   def body

@@ -1,33 +1,34 @@
 class UserRoutes < EhrApiBase
+  route do |r|
+    r.post 'authorize' do
+      user = User.authenticate(params[:identifier], params[:password]) || forbidden!
+      token = Token.find_or_create(user.id)
 
-  post '/authorize' do
-    user = User.authenticate(params[:identifier], params[:password]) || forbidden!
-    token = Token.find_or_create(user.id)
-
-    json user.present(params).merge(token: token.value)
-  end
-
-  namespace('/users') do
-    before { authenticate! }
-
-    get do
-      json paginated(:users, current_user.users_dataset)
+      user.present(params).merge(token: token.value)
     end
 
-    post do
+    authenticate!
+
+    r.get do
+      paginated(:users, current_user.users_dataset)
+    end
+
+    r.post do
       create! User, user_attributes
     end
 
-    get '/:id' do
-      user = User[params[:id].to_i] || not_found!
-      json user.present(params)
-    end
+    r.on ':id' do |user_id|
+      r.get do
+        user = User[user_id] || not_found!
+        user.present(params)
+      end
 
-    put '/:id' do
-      user = User[params[:id].to_i] || not_found!
-      verify_current_user_or_staff!(user)
+      r.put do
+        user = User[user_id] || not_found!
+        verify_current_user_or_staff!(user)
 
-      update! user, user_attributes, User
+        update! user, user_attributes, User
+      end
     end
   end
 

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
-gem 'sinatra-contrib'
+gem 'roda'
+gem 'rack-indifferent'
 gem 'rack-contrib'
 gem 'sequel'
 gem 'pg'

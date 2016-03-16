@@ -34,6 +34,7 @@ describe 'Users' do
       assert @client.advocate_id, client[:advocate_id]
     end
 
+    # TODO: Remove tags from user response!!
     it 'does not return tags' do
       skip
       get user_url('/users', @advocate)
@@ -121,19 +122,19 @@ describe 'Users' do
     end
   end
 
-  describe 'POST /authorize' do
+  describe 'POST /users/authorize' do
     before do
       @advocate = Advocate.spawn!
       @advocate.update(password: 'test')
     end
 
     it 'errors on bad password' do
-      post '/authorize', { identifier: @advocate.username, password: 'bad_pw' }
+      post '/users/authorize', { identifier: @advocate.username, password: 'bad_pw' }
       assert_equal 403, status
     end
 
     it 'returns token on success' do
-      post '/authorize', { identifier: @advocate.username, password: 'test' }
+      post '/users/authorize', { identifier: @advocate.username, password: 'test' }
       assert_equal 200, status
 
       assert body.key? :token

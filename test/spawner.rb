@@ -32,3 +32,9 @@ class User
     self.username ||= "user_#{random_id}"
   end
 end
+
+class Tag
+  def before_spawn
+    self.name ||= "fun_tag_#{random_id}"
+  end
+end

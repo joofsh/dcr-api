@@ -1,40 +1,41 @@
 class ClientRoutes < EhrApiBase
-  namespace('/clients') do
-    before { authenticate! }
+  route do |r|
+    authenticate!
 
-    put '/:id/responses' do
-      client = Client[params[:id].to_i] || not_found!
-      choice = Choice[params[:choice_id].to_i] || not_found!
+    r.on ':id' do |client_id|
+      get 'questions' do
+        client = Client[client_id] || not_found!
 
-      response = Response.create_or_update(client.id, choice.question_id, choice.id)
-
-      if choice.tag
-        client.add_tag(choice.tag) unless client.tags.include? choice.tag
+        {
+          client: client.present(params),
+          questions: client.questions_dataset.map { |q| q.present(params) }
+        }
       end
 
-      json(
-        next_question: choice.next_question.present,
-        response: response.present
-      )
+      r.get 'resources' do
+        client = Client[client_id] || not_found!
+
+        {
+          client: client.present(params),
+          resources: client.resources.first(5).map{ |r| r.present(params) }
+        }
+      end
+
+      r.put 'responses' do
+        client = Client[client_id] || not_found!
+        choice = Choice[params[:choice_id]] || not_found!
+
+        response = Response.create_or_update(client.id, choice.question_id, choice.id)
+
+        if choice.tag
+          client.add_tag(choice.tag) unless client.tags.include? choice.tag
+        end
+
+        {
+          next_question: choice.next_question.present,
+          response: response.present
+        }
+      end
     end
-
-    get '/:id/resources' do
-      client = Client[params[:id].to_i] || not_found!
-
-      json(
-        client: client.present(params),
-        resources: client.resources.first(5).map{ |r| r.present(params) }
-      )
-    end
-
-    get '/:id/questions' do
-      client = Client[params[:id].to_i] || not_found!
-
-      json(
-        client: client.present(params),
-        questions: client.questions_dataset.map { |q| q.present(params) }
-      )
-    end
-
   end
 end

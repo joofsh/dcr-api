@@ -1,8 +1,7 @@
 module HaltHelpers
   def halt(status, headers: {}, body: '')
-    headers['Content-Type'] = 'application/json'
     body = body.to_json unless body.is_a? String
-    super(status, headers, body)
+    request.halt(status, headers, body)
   end
 
   def no_content!

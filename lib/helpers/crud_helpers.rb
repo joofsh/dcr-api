@@ -7,7 +7,7 @@ module CRUDHelpers
     unprocessable_entity!(object.errors) unless object.save
 
     response.status = 201
-    json klass[object.id].present
+    klass[object.id].present
   end
 
   def update!(object, attributes, klass = nil)
@@ -23,7 +23,7 @@ module CRUDHelpers
     # object.reload will throw an error.
     object = klass.fetch(object.id) if klass
 
-    json object.present
+    object.present
   end
 
   def whitelist!(attrs, *fields)

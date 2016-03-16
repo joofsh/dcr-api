@@ -1,9 +1,9 @@
 class TagRoutes < EhrApiBase
-  namespace('/tags') do
+  route do |r|
+    authenticate!
 
-    get do
-      json paginated(:tags, Tag.dataset)
+    r.get do
+      paginated(:tags, Tag.dataset)
     end
-
   end
 end

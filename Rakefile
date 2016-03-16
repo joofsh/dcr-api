@@ -1,10 +1,13 @@
 load './tasks/db.rake'
 
-task default: :server
+task default: :test
 
 task :server do
   exec 'shotgun -p 4000'
+end
 
+task :rackup do
+  exec 'rackup -p 4000 -s webrick'
 end
 
 task :test do

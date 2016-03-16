@@ -1,38 +1,42 @@
 class ResourceRoutes < EhrApiBase
-  namespace('/resources') do
-    get do
-      json paginated(:resources, Resource.dataset)
-    end
+  route do |r|
+    r.on ':id' do |resource_id|
+      r.get do
+        resource = Resource[resource_id] || not_found!
+        resource.present(params)
+      end
 
-    get '/:id' do
-      resource = Resource[params[:id].to_i] || not_found!
-      json resource.present(params)
-    end
+      r.put do
+        verify_staff!
+        resource = Resource[resource_id] || not_found!
 
-    post do
-      create! Resource, resource_attributes
-    end
-
-    put '/:id' do
-      verify_staff!
-      resource = Resource[params[:id].to_i] || not_found!
-
-      tags = resource_attributes.delete('tags') || []
-      DB.transaction do
-        # validate current tags
-        resource.tags.each do |tag|
-          unless tags.include? tag.name
-            resource.remove_tag tag
+        tags = resource_attributes.delete('tags') || []
+        DB.transaction do
+          # validate current tags
+          resource.tags.each do |tag|
+            unless tags.include? tag.name
+              resource.remove_tag tag
+            end
           end
-        end
 
-        # Add new tags
-        tags.each do |tag|
-          _tag = Tag.find_or_create(tag)
-          resource.add_tag _tag unless resource.tags.include?(_tag)
-        end
+          # Add new tags
+          tags.each do |tag|
+            _tag = Tag.find_or_create(tag)
+            resource.add_tag _tag unless resource.tags.include?(_tag)
+          end
 
-        update! resource, resource_attributes
+          update! resource, resource_attributes
+        end
+      end
+    end
+
+    r.is do
+      r.get do
+        paginated(:resources, Resource.dataset)
+      end
+
+      r.post do
+        create! Resource, resource_attributes
       end
     end
   end
