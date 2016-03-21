@@ -16,8 +16,8 @@ namespace :db do
 
   desc "performs db migration up to latest available"
   task :migrate, [:version] => [:environment] do |t, args|
-    ['development', 'test'].each do |env|
-      ENV['RACK_ENV'] = env
+    envs = development? ? ['development', 'test'] : ['production']
+    envs.each do |env|
 
       silence_warnings do
         DB_CONFIG[:database] = database_name
