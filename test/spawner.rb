@@ -1,4 +1,10 @@
 class Sequel::Model
+  def self.spawn(attributes = {})
+    record = new(attributes)
+    record.send(:before_spawn)
+    record
+  end
+
   def self.spawn!(attributes = {})
     record = new(attributes)
     record.send(:before_spawn)
@@ -57,5 +63,14 @@ class Response
     self.client ||= Client.spawn!
     self.choice ||= Choice.spawn!
     self.question = self.choice.question
+  end
+end
+
+class Address
+  def before_spawn
+    self.street ||= '1234 Main St'
+    self.city ||= 'Washington'
+    self.state ||= 'DC'
+    self.zipcode ||= '20009'
   end
 end

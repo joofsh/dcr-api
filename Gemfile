@@ -10,6 +10,7 @@ gem 'shield'
 gem 'puma'
 gem 'rake'
 gem 'pry'
+gem 'httparty'
 
 # debugging
 group :development do

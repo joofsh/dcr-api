@@ -13,6 +13,10 @@ GEM
     debug_inspector (0.0.2)
     dotenv (2.0.2)
     git-version-bump (0.15.1)
+    httparty (0.13.7)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
+    json (1.8.3)
     method_source (0.8.2)
     minitest (5.8.4)
     minitest-reporters (1.1.8)
@@ -20,6 +24,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    multi_xml (0.5.5)
     pg (0.18.4)
     pry (0.10.3)
       coderay (~> 1.1.0)
@@ -56,6 +61,7 @@ DEPENDENCIES
   awesome_print
   database_cleaner
   dotenv
+  httparty
   minitest
   minitest-reporters
   pg
