@@ -20,7 +20,7 @@ namespace :db do
     envs.each do |env|
 
       silence_warnings do
-        DB_CONFIG[:database] = database_name
+        DB_CONFIG[:database] = database_name(env)
         DB = Sequel.connect(DB_CONFIG)
       end
 

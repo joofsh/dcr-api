@@ -1,7 +1,6 @@
 module AuthHelpers
   def authenticate!
-    token = Token.fetch(token_value) || forbidden!
-    @current_user = User[token.user_id] || forbidden!
+    fetch_current_user || forbidden!
   end
 
   def verify_current_user_or_staff!(user)
@@ -12,7 +11,7 @@ module AuthHelpers
 
   def verify_staff!
     authenticate!
-    @current_user.is_staff?
+    current_user.is_staff? || forbidden!
   end
 
   def token_value
@@ -25,6 +24,17 @@ module AuthHelpers
   end
 
   def current_user
-    @current_user
+    @current_user ||= fetch_current_user
+  end
+
+  def current_staff?
+    current_user && current_user.is_staff?
+  end
+
+  private
+
+  def fetch_current_user
+    token = Token.fetch(token_value)
+    @current_user = User[token.user_id] if token
   end
 end

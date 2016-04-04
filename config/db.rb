@@ -9,9 +9,9 @@ Sequel::Model.plugin :association_dependencies
 Sequel::Model.raise_on_save_failure = false
 Sequel.default_timezone = :utc
 
-def database_name
+def database_name(env = nil)
   db_name = ENV['API_DB_NAME']
-  db_name += '_test' if test?
+  db_name += '_test' if env == 'test'
   db_name
 end
 

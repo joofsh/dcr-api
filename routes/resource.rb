@@ -6,6 +6,20 @@ class ResourceRoutes < EhrApiBase
         resource.present(params)
       end
 
+      r.put 'publish' do
+        verify_staff!
+        resource = Resource[resource_id] || not_found!
+        resource.publish!
+        resource.present
+      end
+
+      r.put 'unpublish' do
+        verify_staff!
+        resource = Resource[resource_id] || not_found!
+        resource.unpublish!
+        resource.present
+      end
+
       r.put do
         verify_staff!
         resource = Resource[resource_id] || not_found!
@@ -32,7 +46,8 @@ class ResourceRoutes < EhrApiBase
 
     r.is do
       r.get do
-        paginated(:resources, Resource.dataset)
+        resource_dataset = current_staff? ? Resource.dataset : Resource.published
+        paginated(:resources, resource_dataset)
       end
 
       r.post do

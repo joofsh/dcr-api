@@ -65,11 +65,4 @@ class User < Sequel::Model
     validates_presence [:role, :username, :first_name, :last_name]
     validates_unique :username, :email
   end
-
-  def extend_present
-    {
-      tags: tags.map(&:name)
-    }
-  end
-
 end

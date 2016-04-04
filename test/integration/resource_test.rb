@@ -14,6 +14,33 @@ describe "Resources" do
       assert_equal 4, body[:count]
       assert @resource.id, body[:resources].first[:id]
     end
+
+    it 'filters by published if non-staff' do
+      @resource.unpublish!
+      assert_equal 3, Resource.published.count
+      get user_url('/resources', Client.spawn!)
+
+      assert_equal 200, status
+      assert_equal 3, body[:count]
+    end
+
+    it 'filters by published if not authed' do
+      @resource.unpublish!
+      assert_equal 3, Resource.published.count
+      get '/resources'
+
+      assert_equal 200, status
+      assert_equal 3, body[:count]
+    end
+
+    it 'returns all resources if staff' do
+      @resource.unpublish!
+      assert_equal 3, Resource.published.count
+      get user_url('/resources', Advocate.spawn!)
+
+      assert_equal 200, status
+      assert_equal 4, body[:count]
+    end
   end
 
   describe 'POST /resources' do
@@ -46,6 +73,28 @@ describe "Resources" do
       @attrs.merge!(mailing_address: { street: street })
 
       post '/resources', { resource: @attrs }
+    end
+  end
+
+  describe 'Publishing' do
+    it 'requires auth' do
+      put "/resources/#{@resource.id}/publish"
+      assert_equal 403, status
+
+      put "/resources/#{@resource.id}/unpublish"
+      assert_equal 403, status
+    end
+
+    it 'publishes' do
+      put user_url("/resources/#{@resource.id}/publish", Advocate.spawn!)
+      assert_equal 200, status
+      assert @resource.reload.published
+    end
+
+    it 'unpublishes' do
+      put user_url("/resources/#{@resource.id}/unpublish", Advocate.spawn!)
+      assert_equal 200, status
+      deny @resource.reload.published
     end
   end
 end

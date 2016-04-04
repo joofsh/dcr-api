@@ -9,9 +9,23 @@ class Resource < Sequel::Model
 
   add_association_dependencies address: :destroy
 
+  dataset_module do
+    def published
+      where(published: true)
+    end
+  end
+
   def extend_present
     {
       tags: tags.map(&:name)
     }
+  end
+
+  def publish!
+    update(published: true)
+  end
+
+  def unpublish!
+    update(published: false)
   end
 end

@@ -26,6 +26,7 @@ end
 class Resource
   def before_spawn
     self.title ||= 'Dummy title'
+    self.published ||= true
   end
 end
 

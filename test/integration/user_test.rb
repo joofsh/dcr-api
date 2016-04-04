@@ -34,9 +34,7 @@ describe 'Users' do
       assert @client.advocate_id, client[:advocate_id]
     end
 
-    # TODO: Remove tags from user response!!
     it 'does not return tags' do
-      skip
       get user_url('/users', @advocate)
 
       assert_equal 200, status
