@@ -76,6 +76,7 @@ namespace :db do
     puts "Database #{DB_NAME} created"
   end
 
+  desc "Reset database and load test data"
   task :reset => [:environment] do
     #Rake::Task['db:kill_postgres_connections'].execute
     Rake::Task['db:drop'].execute
@@ -85,6 +86,7 @@ namespace :db do
 
   end
 
+  desc "Load test data"
   task :test_data => [:environment] do
     require './dummy_data'
 
