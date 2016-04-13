@@ -59,7 +59,9 @@ class ResourceRoutes < EhrApiBase
   def resource_attributes
     @resource_attributes ||= begin
       attrs = params[:resource] || bad_request!
-      whitelist!(attrs, :operating_hours, :phone, :title, :url, :image_url, :address, :tags)
+      whitelist!(attrs, :operating_hours, :phone, :title, :url, :image_url,
+                :description, :email, :category, :population_served, :note, :languages,
+                :address, :tags)
 
       rename_nested_attributes!('address', attrs, Resource, params[:id],
                                 :street, :street_2, :city, :state, :zipcode)

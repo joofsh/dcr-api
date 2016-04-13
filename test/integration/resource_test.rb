@@ -47,7 +47,9 @@ describe "Resources" do
     before do
       @attrs = {
         title: 'new title',
-        phone: '917-314-3335'
+        phone: '917-314-3335',
+        description: 'a new description',
+        email: 'this@at.foo'
       }
     end
 
@@ -60,6 +62,8 @@ describe "Resources" do
       post user_url('/resources'), { resource: @attrs }
       assert_equal 201, status
       assert_equal @attrs[:title], body[:title]
+      assert_equal @attrs[:description], body[:description]
+      assert_equal @attrs[:email], body[:email]
       assert body.key? :id
     end
 
