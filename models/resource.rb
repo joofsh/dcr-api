@@ -4,7 +4,7 @@ class Resource < Sequel::Model
   many_to_many :tags
   many_to_one :address
 
-  nested_attributes :address
+  nested_attributes :address, destroy: true
   presented_methods :address
 
   add_association_dependencies address: :destroy

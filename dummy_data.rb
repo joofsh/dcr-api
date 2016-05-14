@@ -17,7 +17,10 @@ def build_dummy_data
   cl.add_tag tags[1]
 
   10.times do |i|
-    r = Resource.create(title: "Dummy Resource ##{i}", url: 'http://google.com')
+    r = Resource.create(title: "Dummy Resource ##{i}",
+                        category: ['Physical Health'],
+                        url: 'http://google.com',
+                        published: true)
 
     r.add_tag tags[i % 3]
   end

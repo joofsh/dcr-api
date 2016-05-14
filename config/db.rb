@@ -10,8 +10,10 @@ Sequel::Model.raise_on_save_failure = false
 Sequel.default_timezone = :utc
 
 def database_name(env = nil)
+  test = (env || ENV['RACK_ENV']) == 'test'
+
   db_name = ENV['API_DB_NAME']
-  db_name += '_test' if env == 'test'
+  db_name += '_test' if test
   db_name
 end
 
@@ -27,4 +29,4 @@ DB_CONFIG = {
 DB ||= Sequel.connect(DB_CONFIG)
 
 DB.extension :null_dataset
-
+DB.extension :pg_array

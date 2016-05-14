@@ -1,6 +1,8 @@
 class ResourceRoutes < EhrApiBase
   route do |r|
     r.on ':id' do |resource_id|
+      params[:resource_id] = resource_id
+
       r.get do
         resource = Resource[resource_id] || not_found!
         resource.present(params)
@@ -63,7 +65,7 @@ class ResourceRoutes < EhrApiBase
                 :description, :email, :category, :population_served, :note, :languages,
                 :address, :tags)
 
-      rename_nested_attributes!('address', attrs, Resource, params[:id],
+      rename_nested_attributes!('address', attrs, Resource, params[:resource_id],
                                 :street, :street_2, :city, :state, :zipcode)
 
       attrs
