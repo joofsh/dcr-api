@@ -75,5 +75,9 @@ class EhrAPI < EhrApiBase
     r.on 'config' do
       r.run ConfigRoutes
     end
+
+    r.on 'questions' do
+      r.run QuestionRoutes
+    end
   end
 end

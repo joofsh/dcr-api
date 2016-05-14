@@ -3,7 +3,7 @@ class Question < Sequel::Model
 
   one_to_many :responses
   one_to_many :choices
-  nested_attributes :choices
+  nested_attributes :choices, destroy: true
   presented_methods :choices
 
   add_association_dependencies choices: :destroy
@@ -12,5 +12,9 @@ class Question < Sequel::Model
     def for_client(id)
       self
     end
+  end
+
+  def validate
+    validates_presence [:stem]
   end
 end

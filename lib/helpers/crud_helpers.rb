@@ -1,7 +1,5 @@
 module CRUDHelpers
   def create!(klass, attributes)
-    klass.whitelist! attributes
-
     object = klass.new attributes
 
     unprocessable_entity!(object.errors) unless object.save
@@ -21,7 +19,7 @@ module CRUDHelpers
     # We need to use this way instead of object.reload,
     # because in STI when the kind attribute is changed,
     # object.reload will throw an error.
-    object = klass.fetch(object.id) if klass
+    object = klass[object.id] if klass
 
     object.present
   end
@@ -59,7 +57,12 @@ module CRUDHelpers
           attrs["#{key_name}_attributes"] = { id: existing_obj.id, _delete: true }
         end
         attrs.delete key_name
-      else
+      elsif attrs[key_name].is_a?(Array)
+        whitelisted_objs = attrs.delete(key_name).map do |nested_obj|
+          whitelist! nested_obj, *fields
+        end
+        attrs["#{key_name}_attributes"] = whitelisted_objs
+      elsif attrs[key_name].is_a?(Hash)
         whitelisted_attrs = whitelist! attrs.delete(key_name), *fields
         whitelisted_attrs[:id] = existing_obj.id if existing_obj
         attrs["#{key_name}_attributes"] = whitelisted_attrs

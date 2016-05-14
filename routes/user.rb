@@ -9,26 +9,25 @@ class UserRoutes < EhrApiBase
 
     authenticate!
 
+    r.on ':id' do |user_id|
+      user = User[user_id] || not_found!
+
+      r.get do
+        user.present(params)
+      end
+
+      r.put do
+        verify_current_user_or_staff!(user)
+        update! user, user_attributes, User
+      end
+    end
+
     r.get do
       paginated(:users, current_user.users_dataset)
     end
 
     r.post do
       create! User, user_attributes
-    end
-
-    r.on ':id' do |user_id|
-      r.get do
-        user = User[user_id] || not_found!
-        user.present(params)
-      end
-
-      r.put do
-        user = User[user_id] || not_found!
-        verify_current_user_or_staff!(user)
-
-        update! user, user_attributes, User
-      end
     end
   end
 

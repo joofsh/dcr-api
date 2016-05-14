@@ -7,6 +7,21 @@ describe 'Users' do
     3.times { Client.spawn! advocate: @advocate }
   end
 
+  describe 'GET /users/:id' do
+    it 'requires token' do
+      get "/users/#{@client.id}"
+
+      assert_equal 403, status
+    end
+
+    it 'returns a user' do
+      get user_url("/users/#{@client.id}", @advocate)
+
+      assert_equal 200, status
+      assert_equal @client.id, body[:id]
+    end
+  end
+
   describe 'GET /users' do
     it 'requires token' do
       get '/users'
