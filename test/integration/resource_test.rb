@@ -69,7 +69,7 @@ describe "Resources" do
 
     it 'errors with bad content' do
       post 'resources', { resource: {} }
-      assert_equal 400, status
+      assert_equal 422, status
     end
 
     it 'creates an address' do

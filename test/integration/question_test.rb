@@ -60,7 +60,7 @@ describe 'Questions' do
     it 'errors with bad content' do
       post user_url('/questions', @advocate), { question: {} }
 
-      assert_equal 400, status
+      assert_equal 422, status
     end
 
     it 'creates a new question' do
@@ -123,7 +123,7 @@ describe 'Questions' do
 
     it 'allows deleting nested choices' do
       original_choice = @question.choices.first
-      attrs = { choices: [{ id: original_choice.id, _delete: true }] }
+      attrs = { choices: [] }
 
       assert_equal 1, @question.reload.choices.count
 

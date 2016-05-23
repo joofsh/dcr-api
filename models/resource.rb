@@ -28,4 +28,8 @@ class Resource < Sequel::Model
   def unpublish!
     update(published: false)
   end
+
+  def validate
+    validates_presence [:title]
+  end
 end

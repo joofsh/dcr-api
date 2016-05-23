@@ -12,6 +12,10 @@ class Question < Sequel::Model
     def for_client(id)
       self
     end
+
+    def ordered
+      order_by(Sequel.asc(:order, nulls: :last))
+    end
   end
 
   def validate

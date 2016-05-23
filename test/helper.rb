@@ -36,6 +36,20 @@ class MiniTest::Spec
     EhrAPI
   end
 
+  def post(uri, data = {}, opts = {})
+    @body = nil
+    if opts[:upload]
+      super(uri, data, opts)
+    else
+      super(uri, data.to_json, opts)
+    end
+  end
+
+  def put(uri, data = {}, *opts)
+    @body = nil
+    super(uri, data.to_json, *opts)
+  end
+
   def body
     @body ||= JSON.parse last_response.body, symbolize_names: true
   end
@@ -55,6 +69,8 @@ class MiniTest::Spec
   end
 
   before do
+    header "Content-Type", "application/json"
+    header "Accept", "application/json"
     DatabaseCleaner.start
   end
 

@@ -80,7 +80,7 @@ describe 'Users' do
     it 'errors with bad content' do
       post user_url('/users', @advocate), { user: {} }
 
-      assert_equal 400, status
+      assert_equal 422, status
     end
 
     it 'creates a new user' do

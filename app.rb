@@ -35,6 +35,7 @@ class EhrApiBase < Roda
 
   plugin :all_verbs
   plugin :default_headers, 'Content-Type'=>'application/json'
+  plugin :drop_body
   plugin :json, :classes=>[Array, Hash, Sequel::Model]
   plugin :halt
   plugin :error_handler do |e|
