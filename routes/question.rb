@@ -36,7 +36,8 @@ class QuestionRoutes < EhrApiBase
     whitelist!(attrs, :order, :stem, :choices)
 
     rename_nested_attributes!('choices', attrs, Question, params[:question_id],
-                              :id, :stem, :tag_id, :question_id, :next_question_id)
+                              :id, :stem, :question_id, :next_question_id, :tag_pks)
+
     attrs
   end
 end

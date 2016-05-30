@@ -25,7 +25,14 @@ class Sequel::Model
 
     _presented_methods.each do |method|
       value = self.send(method) rescue nil
-      value = value.present if value.class < Sequel::Model
+      if value.is_a?(Array)
+        value.map! do |v|
+          v.class < Sequel::Model ? v.present : v
+        end
+      elsif value.class < Sequel::Model
+        value = value.present
+      end
+
       obj[method] = value
     end
 

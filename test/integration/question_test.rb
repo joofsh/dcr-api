@@ -80,6 +80,17 @@ describe 'Questions' do
       assert_equal choices.count, body[:choices].count
       assert_equal choices[0][:stem], body[:choices][0][:stem]
     end
+
+    it 'creates tags within choices' do
+      tag_1 = Tag.spawn!
+      tag_2 = Tag.spawn!
+      choices = [{ stem: 'Yes', tags: [tag_1, tag_2] }, { stem: 'No', tags: [tag_1] }]
+      @attrs.merge!(choices: choices)
+      post user_url('/questions', @advocate), { question: @attrs }
+      assert_equal 201, status
+      assert_equal choices.count, body[:choices].count
+      assert_equal choices[0][:stem], body[:choices][0][:stem]
+    end
   end
 
   describe 'PUT /questions' do
@@ -131,6 +142,19 @@ describe 'Questions' do
 
       assert_equal 200, status
       assert_equal 0, @question.reload.choices.count
+    end
+
+    it 'allows adding/removing tags from choices' do
+      tag_1, tag_2 = Tag.spawn!, Tag.spawn!
+      choice = @question.choices.first
+      choice.add_tag tag_1
+
+      attrs = { choices: [{ id: choice.id, tag_pks: [tag_2.id] }] }
+      put user_url("/questions/#{@question.id}", @advocate), { question: attrs }
+
+      assert_equal 200, status
+      assert_equal tag_2.id, body[:choices][0][:tags][0][:id]
+      assert_equal [tag_2], choice.reload.tags
     end
   end
 end

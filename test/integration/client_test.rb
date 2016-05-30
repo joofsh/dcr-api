@@ -98,7 +98,7 @@ describe 'Clients' do
 
     it 'adds choice\'s associated tag to the client' do
       tag = Tag.spawn!
-      @choice.update(tag: tag)
+      @choice.add_tag tag
       deny @client.tags.include? tag
 
       put user_url("/clients/#{@client.id}/responses"), @attrs

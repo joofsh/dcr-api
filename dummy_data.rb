@@ -9,7 +9,7 @@ def build_dummy_data
   tags = [
     Tag.create(name: 'hiv-positive'),
     Tag.create(name: 'narcotic-user'),
-    Tag.create(name: 'homeless'),
+    Tag.create(name: 'homeless')
   ]
 
   cl = Client.first
@@ -27,14 +27,17 @@ def build_dummy_data
 
   q3 = Question.create(stem: 'Do you have a stable home residence?', order: 3)
   Choice.create(stem: 'Yes', question: q3)
-  Choice.create(stem: 'No', question: q3, tag: tags[2])
+  ch = Choice.create(stem: 'No', question: q3)
+  ch.update(tag_pks: [tags[2].id])
 
   q2 = Question.create(stem: 'Are you actively taking narcotic?', order: 2)
-  Choice.create(stem: 'Yes', question: q2, next_question: q3, tag: tags[1])
+  ch = Choice.create(stem: 'Yes', question: q2, next_question: q3)
+  ch.update(tag_pks: [tags[1].id])
   Choice.create(stem: 'No', question: q2, next_question: q3)
 
   q1 = Question.create(stem: 'Are you HIV positive?', order: 1)
-  Choice.create(stem: 'Yes', question: q1, next_question: q2, tag: tags[0])
+  ch = Choice.create(stem: 'Yes', question: q1, next_question: q2)
+  ch.update(tag_pks: [tags[0].id])
   Choice.create(stem: 'No', question: q1, next_question: q2)
 
 end
