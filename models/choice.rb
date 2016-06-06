@@ -1,4 +1,5 @@
 class Choice < Sequel::Model
+  plugin :paranoid, enable_default_scope: true, deleted_column_default: Time.at(0)
   plugin :association_pks
 
   many_to_one :question

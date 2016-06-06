@@ -48,6 +48,11 @@ GEM
       rack
     ruby-progressbar (1.7.5)
     sequel (4.29.0)
+    sequel-paranoid (0.6.2)
+      sequel
+    sequel_pg (1.6.17)
+      pg (>= 0.8.0)
+      sequel (>= 4.0.0)
     shield (2.1.1)
       armor
     shotgun (0.9.1)
@@ -74,6 +79,8 @@ DEPENDENCIES
   rake
   roda
   sequel
+  sequel-paranoid
+  sequel_pg
   shield
   shotgun
 

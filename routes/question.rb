@@ -33,7 +33,7 @@ class QuestionRoutes < EhrApiBase
 
   def question_attributes
     attrs = params[:question] || bad_request!
-    whitelist!(attrs, :order, :stem, :choices)
+    whitelist!(attrs, :order, :stem, :choices, :category)
 
     rename_nested_attributes!('choices', attrs, Question, params[:question_id],
                               :id, :stem, :question_id, :next_question_id, :tag_pks)

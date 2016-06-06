@@ -29,6 +29,19 @@ describe 'Questions' do
       assert question.key? :stem
       assert question.key? :choices
     end
+
+    it 'orders them by category and order' do
+      Question.each(&:destroy)
+      q1 = Question.spawn!(category: 'Education', order: 1)
+      q2 = Question.spawn!(category: 'General', order: 2)
+      q3 = Question.spawn!(category: 'Education', order: 2)
+      q4 = Question.spawn!(category: 'General', order: 1)
+
+      get '/questions'
+      assert_equal 200, status
+      question_ids = body[:questions].map { |q| q[:id] }
+      assert_equal [q4.id, q2.id, q1.id, q3.id], question_ids
+    end
   end
 
   describe 'GET /questions/:id' do
@@ -48,7 +61,8 @@ describe 'Questions' do
   describe 'POST /questions' do
     before do
       @attrs = {
-        stem: 'What is your address?'
+        stem: 'What is your address?',
+        category: 'Education'
       }
     end
 
@@ -96,7 +110,8 @@ describe 'Questions' do
   describe 'PUT /questions' do
     before do
       @attrs = {
-        stem: 'funky new stem'
+        stem: 'funky new stem',
+        category: 'Education'
       }
     end
 
@@ -111,6 +126,7 @@ describe 'Questions' do
 
       assert_equal 200, status
       assert_equal @attrs[:stem], body[:stem]
+      assert_equal @attrs[:category], body[:category]
       assert_equal 1, @question.reload.choices.count
     end
 
