@@ -36,6 +36,21 @@ class Question < Sequel::Model
     def ordered
       order_by_order.order_by_category
     end
+
+    def exclude_answered_by(user)
+      answered_ids = user.responses_dataset.select(:question_id)
+      exclude(id: answered_ids)
+    end
+
+    def current_for_user(user)
+      response = user.responses_dataset.last
+
+      question = if response && response.choice.next_question
+        response.choice.next_question
+      else
+        exclude_answered_by(user).first
+      end
+    end
   end
 
   def before_validation

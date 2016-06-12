@@ -63,6 +63,27 @@ describe 'Users' do
     end
   end
 
+  describe 'POST /guests' do
+    it 'requires no auth' do
+      post '/users/guests'
+      assert_equal 201, status
+    end
+
+    it 'returns auth token' do
+      post '/users/guests'
+      assert_equal 201, status
+      assert body.key? :id
+      assert body.key? :token
+    end
+
+    it 'can make many successive random guests' do
+      10.times do
+        post '/users/guests'
+        assert_equal 201, status
+      end
+    end
+  end
+
   describe 'POST /users' do
     before do
       @attrs = {
@@ -78,7 +99,7 @@ describe 'Users' do
     end
 
     it 'errors with bad content' do
-      post user_url('/users', @advocate), { user: {} }
+      post user_url('/users', @advocate), { user: { role: 'advocate' } }
 
       assert_equal 422, status
     end

@@ -69,8 +69,8 @@ class EhrAPI < EhrApiBase
       r.run TagRoutes
     end
 
-    r.on 'clients' do
-      r.run ClientRoutes
+    r.on 'wizard' do
+      r.run WizardRoutes
     end
 
     r.on 'config' do

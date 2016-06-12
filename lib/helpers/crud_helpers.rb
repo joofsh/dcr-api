@@ -1,5 +1,5 @@
 module CRUDHelpers
-  def create!(klass, attributes)
+  def create!(klass, attributes = {})
     object = klass.new attributes
 
     unprocessable_entity!(object.errors) unless object.save

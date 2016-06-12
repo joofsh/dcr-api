@@ -4,14 +4,14 @@ module AuthHelpers
   end
 
   def verify_current_user_or_staff!(user)
-    @current_user.is_staff? ||
+    @current_user.staff? ||
       user.id == @current_user.id ||
       forbidden!
   end
 
   def verify_staff!
     authenticate!
-    current_user.is_staff? || forbidden!
+    current_user.staff? || forbidden!
   end
 
   def token_value
@@ -28,7 +28,7 @@ module AuthHelpers
   end
 
   def current_staff?
-    current_user && current_user.is_staff?
+    current_user && current_user.staff?
   end
 
   private

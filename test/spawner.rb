@@ -40,6 +40,17 @@ class User
   end
 end
 
+class Advocate
+  def before_spawn
+    id = random_id
+    self.first_name ||= 'John'
+    self.last_name ||= 'Doe'
+    self.email ||= "foo_#{random_id}@bar.com"
+    self.username ||= "user_#{random_id}"
+    self.crypted_password ||= 'test'
+  end
+end
+
 class Tag
   def before_spawn
     self.name ||= "fun_tag_#{random_id}"
@@ -61,7 +72,7 @@ end
 
 class Response
   def before_spawn
-    self.client ||= Client.spawn!
+    self.user ||= Guest.spawn!
     self.choice ||= Choice.spawn!
     self.question = self.choice.question
   end

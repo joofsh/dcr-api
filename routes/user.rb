@@ -7,6 +7,13 @@ class UserRoutes < EhrApiBase
       user.present(params).merge(token: token.value)
     end
 
+    r.post 'guests' do
+      presented_guest = create! Guest
+      token = Token.find_or_create(presented_guest[:id])
+
+      presented_guest.merge(token: token.value)
+    end
+
     authenticate!
 
     r.on ':id' do |user_id|

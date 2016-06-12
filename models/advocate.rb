@@ -3,7 +3,7 @@ require_relative './user'
 class Advocate < User
   one_to_many :clients, class: :Client, key: :advocate_id
 
-  def is_staff?
+  def staff?
     true
   end
 
