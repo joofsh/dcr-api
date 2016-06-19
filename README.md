@@ -1,3 +1,3 @@
-# DC Resources API
+# DC Resources Backend
 
-Backend for [DC Resources](http://dc-resources.com). Built in ruby using  Rack, Roda, and Sequel
+Backend API for [DC Resources](http://dc-resources.com). Built in ruby using  Rack, Roda, and Sequel
