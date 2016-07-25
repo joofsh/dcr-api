@@ -43,6 +43,8 @@ GEM
       rack (~> 1.4)
     rack-indifferent (1.1.0)
       rack (>= 1.5)
+    rack-test (0.6.3)
+      rack (>= 1.0)
     rake (10.4.2)
     roda (2.11.0)
       rack
@@ -76,6 +78,7 @@ DEPENDENCIES
   puma
   rack-contrib
   rack-indifferent
+  rack-test
   rake
   roda
   sequel
@@ -85,4 +88,4 @@ DEPENDENCIES
   shotgun
 
 BUNDLED WITH
-   1.11.2
+   1.12.5

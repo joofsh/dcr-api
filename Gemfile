@@ -23,6 +23,7 @@ group :development do
 end
 
 group :test do
+  gem "rack-test", require: "rack/test"
   gem 'minitest'
   gem 'minitest-reporters'
   gem 'database_cleaner'
