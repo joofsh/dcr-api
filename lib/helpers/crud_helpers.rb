@@ -5,7 +5,7 @@ module CRUDHelpers
     unprocessable_entity!(object.errors) unless object.save
 
     response.status = 201
-    klass[object.id].present
+    klass[object.id].present(details: true)
   end
 
   def update!(object, attributes, klass = nil)
@@ -21,7 +21,7 @@ module CRUDHelpers
     # object.reload will throw an error.
     object = klass[object.id] if klass
 
-    object.present
+    object.present(details: true)
   end
 
   def destroy!(klass, id)

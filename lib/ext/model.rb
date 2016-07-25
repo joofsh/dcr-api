@@ -15,7 +15,7 @@ class Sequel::Model
     attrs.keep_if { |key, _| !blacklisted_fields.include?(key.to_sym) }
   end
 
-  def present params = {}
+  def present(options = {})
     obj = self.to_hash
 
 
