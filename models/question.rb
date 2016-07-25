@@ -4,10 +4,10 @@ class Question < Sequel::Model
 
   # Note: the order categories show up in this array is the order they will appear in
   # the client question wizard
-  CATEGORIES = ['General', 'Demographic', 'Education', 'Employment', 'Family', 'Health',
+  CATEGORIES = ['Initial', 'General', 'Demographic', 'Education', 'Employment', 'Family', 'Health',
                 'Housing', 'Legal', 'Mental Health', 'Substance Use']
 
-  DEFAULT_CATEGORY = CATEGORIES.first
+  DEFAULT_CATEGORY = CATEGORIES[1] # General
 
   one_to_many :responses
   one_to_many :choices
@@ -48,7 +48,7 @@ class Question < Sequel::Model
       question = if response && response.choice.next_question
         response.choice.next_question
       else
-        exclude_answered_by(user).first
+        exclude_answered_by(user).ordered.first
       end
     end
   end
