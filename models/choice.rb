@@ -4,7 +4,7 @@ class Choice < Sequel::Model
 
   many_to_one :question
   many_to_one :next_question, class: :Question
-  many_to_many :tags
+  many_to_many :tags, delay_pks: true
 
   presented_methods :tags
 
