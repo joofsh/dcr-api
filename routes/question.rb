@@ -21,7 +21,7 @@ class QuestionRoutes < EhrApiBase
     end
 
     r.get do
-      paginated(:questions, Question.dataset.ordered)
+      paginated(:questions, Question.dataset.ordered_by_created_at)
     end
 
     r.post do

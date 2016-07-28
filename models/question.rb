@@ -33,6 +33,10 @@ class Question < Sequel::Model
       order_prepend(Sequel.asc(:order, nulls: :last))
     end
 
+    def ordered_by_created_at
+      order_prepend(Sequel.asc(:created_at))
+    end
+
     def ordered
       order_by_order.order_by_category
     end
