@@ -20,6 +20,15 @@ task :console do
   exec 'pry -r ./app'
 end
 
+task :build_graph do
+  require_relative './app'
+  require_relative './lib/build_graph'
+
+  puts "Building graph"
+  build_graph
+  puts "Complete!"
+end
+
 def run(dir)
   Dir[dir].each { |file| load file }
 end
