@@ -30,7 +30,7 @@ describe 'Questions' do
       assert question.key? :choices
     end
 
-    it 'orders them by category and order' do
+    it 'orders them by created_at' do
       Question.each(&:destroy)
       q1 = Question.spawn!(category: 'Education', order: 1)
       q2 = Question.spawn!(category: 'General', order: 2)
@@ -40,7 +40,7 @@ describe 'Questions' do
       get '/questions'
       assert_equal 200, status
       question_ids = body[:questions].map { |q| q[:id] }
-      assert_equal [q4.id, q2.id, q1.id, q3.id], question_ids
+      assert_equal [q1.id, q2.id, q3.id, q4.id], question_ids
     end
   end
 

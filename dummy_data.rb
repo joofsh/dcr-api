@@ -18,6 +18,7 @@ def build_dummy_data
 
   10.times do |i|
     r = Resource.create(title: "Dummy Resource ##{i}",
+                        description: "New amazing awesome resource just for you!",
                         category: ['Physical Health'],
                         url: 'http://google.com',
                         published: true)

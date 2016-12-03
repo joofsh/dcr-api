@@ -24,6 +24,7 @@ namespace :db do
         DB = Sequel.connect(DB_CONFIG)
       end
 
+      p "Checking migration status for: #{env}"
       if args[:version]
         Sequel::Migrator.run(DB, "migrations", target: args[:version].to_i)
       else
