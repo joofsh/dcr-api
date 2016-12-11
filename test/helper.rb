@@ -5,6 +5,7 @@ require_relative '../app'
 # Load mock services
 Dir['./test/services/*.rb'].each { |file| require file }
 
+require 'pry'
 require 'rack/test'
 require 'minitest'
 require 'minitest/autorun'

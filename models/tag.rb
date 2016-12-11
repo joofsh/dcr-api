@@ -29,6 +29,10 @@ class Tag < Sequel::Model
     def ordered
       order_by_weight.order_by_type
     end
+
+    def service
+      where(type: TYPES[0]) # Service
+    end
   end
 
   def self.find_or_create(tag_name)

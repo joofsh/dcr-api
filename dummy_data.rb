@@ -7,9 +7,10 @@ def build_dummy_data
   end
 
   tags = [
-    Tag.create(name: 'hiv-positive'),
-    Tag.create(name: 'narcotic-user'),
-    Tag.create(name: 'homeless')
+    Tag.create(name: 'hiv-positive', weight: 40),
+    Tag.create(name: 'narcotic-user', weight: 60),
+    Tag.create(name: 'homeless', weight: 80),
+    Tag.create(name: 'shelter', type: 'Service')
   ]
 
   cl = Client.first
@@ -18,12 +19,20 @@ def build_dummy_data
 
   10.times do |i|
     r = Resource.create(title: "Dummy Resource ##{i}",
-                        description: "New amazing awesome resource just for you!",
+                        description: "New amazing awesome resource just for you!\n Second line",
                         category: ['Physical Health'],
                         url: 'http://google.com',
                         published: true)
 
-    r.add_tag tags[i % 3]
+    r.add_tag tags[i % 4]
+    r.add_tag tags[i % 3] rescue nil
+  end
+
+  3.times do |i|
+    guest = Guest.create
+    Tag.each do |tag|
+      guest.add_tag(tag)
+    end
   end
 
   q3 = Question.create(stem: 'Do you have a stable home residence?', order: 3)
