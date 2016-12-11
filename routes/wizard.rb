@@ -18,7 +18,10 @@ class WizardRoutes < EhrApiBase
       r.get 'resources' do
         {
           user: user.present(params),
-          resources: user.resources.first(5).map{ |r| r.present(params) }
+          resources: user.resource_map.reduce({}) do |hash, (tag, resources)|
+            hash[tag] = resources.map { |r| r.present(params) }
+            hash
+          end
         }
       end
 

@@ -18,6 +18,7 @@ class User < Sequel::Model
       'admin' => :Admin
     }
 
+  one_to_many :resources
   one_to_many :responses, order: Sequel.asc(:created_at)
   many_to_many :tags, order: Sequel.desc(:weight)
   many_to_one :mailing_address, class: :Address
@@ -41,22 +42,16 @@ class User < Sequel::Model
 
   # TODO: Refactor this. Needs to become a lot more sophisticated
   # and faster.
-  def resources
-    @resources ||= begin
-      resources = []
-      tag_count = tags.count
+  def resource_map
+    @resource_map ||= begin
 
-      tags.each do |tag|
-        if tag_count == 1
-          resources << tag.resources_dataset.limit(5).all
-        elsif tag_count == 2
-          resources << tag.resources_dataset.limit(3).all
-        else
-          resources << tag.resources_dataset.limit(2).all
-        end
+      resource_map = tags_dataset.service.order_by_weight.reduce({}) do |hash, service_tag|
+        hash[service_tag.name.to_sym] =
+          Resource.sorted_by_descriptor_weight(service_tag).all
+        hash
       end
 
-      resources.flatten
+      resource_map
     end
   end
 

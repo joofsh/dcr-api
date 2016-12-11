@@ -46,12 +46,15 @@ describe 'Wizard' do
 
   describe 'GET /wizard/:id/resources' do
     before do
-      tag = Tag.spawn!
-      6.times {
+      @tags = [Tag.spawn!(type: 'Service'), Tag.spawn!(type: 'Service')]
+      6.times do |i|
         r = Resource.spawn!
-        r.add_tag tag
-      }
-      @guest.add_tag tag
+        r.add_tag @tags[i % 2]
+      end
+
+      @tags.each do |t|
+        @guest.add_tag(t)
+      end
     end
 
     it 'requires token' do
@@ -66,9 +69,17 @@ describe 'Wizard' do
       assert body.key? :user
       assert body.key? :resources
       assert_equal @guest.id, body[:user][:id]
-      assert_equal 5, body[:resources].count
-      assert body[:resources].first.key? :title
-      assert body[:resources].first.key? :id
+      assert_equal 2, body[:resources].count
+      assert body[:resources].keys.include?(@tags[0].name.to_sym)
+      assert body[:resources].keys.include?(@tags[1].name.to_sym)
+
+      first_resource_set = body[:resources][@tags[0].name.to_sym]
+      assert_equal 3, first_resource_set.count
+      assert first_resource_set.first.key? :title
+      assert first_resource_set.first.key? :id
+
+      second_resource_set = body[:resources][@tags[1].name.to_sym]
+      assert_equal 3, second_resource_set.count
     end
   end
 

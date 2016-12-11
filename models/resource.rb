@@ -15,6 +15,19 @@ class Resource < Sequel::Model
     def published
       where(published: true)
     end
+
+    def sorted_by_descriptor_weight(service_tag)
+      resource_ids = service_tag.resources_dataset.select(:id)
+
+      left_join(:resources_tags, resource_id: :resources__id)
+        .left_join(:tags, tags__id: :tag_id, tags__type: 'Descriptor')
+        .where(resources__id: resource_ids)
+        .select_all(:resources)
+        .group_by(:resources__id)
+        .select_append(
+          Sequel.function(:coalesce, Sequel.function(:sum, :weight), 0).as(:ranking)
+        ).order(Sequel.desc(:ranking), :resources__id)
+    end
   end
 
   def publish!
