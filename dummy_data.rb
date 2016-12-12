@@ -6,16 +6,20 @@ def build_dummy_data
     Client.create(first_name: 'John', last_name: 'Doe', birthdate: (Date.today - i), advocate_id: a.id)
   end
 
-  tags = [
+  desc_tags = [
     Tag.create(name: 'hiv-positive', weight: 40),
     Tag.create(name: 'narcotic-user', weight: 60),
-    Tag.create(name: 'homeless', weight: 80),
-    Tag.create(name: 'shelter', type: 'Service')
+    Tag.create(name: 'homeless', weight: 80)
+  ]
+
+  service_tags = [
+    Tag.create(name: 'shelter', type: 'Service'),
+    Tag.create(name: 'health center', type: 'Service')
   ]
 
   cl = Client.first
-  cl.add_tag tags[0]
-  cl.add_tag tags[1]
+  cl.add_tag desc_tags[0]
+  cl.add_tag desc_tags[1]
 
   10.times do |i|
     r = Resource.create(title: "Dummy Resource ##{i}",
@@ -24,8 +28,9 @@ def build_dummy_data
                         url: 'http://google.com',
                         published: true)
 
-    r.add_tag tags[i % 4]
-    r.add_tag tags[i % 3] rescue nil
+    r.add_tag desc_tags[i % 3]
+    r.add_tag desc_tags[i % 2] rescue nil
+    r.add_tag service_tags[i % 2]
   end
 
   3.times do |i|
@@ -38,16 +43,16 @@ def build_dummy_data
   q3 = Question.create(stem: 'Do you have a stable home residence?', order: 3)
   Choice.create(stem: 'Yes', question: q3)
   ch = Choice.create(stem: 'No', question: q3)
-  ch.update(tag_pks: [tags[2].id, tags[3].id])
+  ch.update(tag_pks: [desc_tags[2].id, service_tags[0].id])
 
   q2 = Question.create(stem: 'Are you actively taking narcotic?', order: 2)
   ch = Choice.create(stem: 'Yes', question: q2, next_question: q3)
-  ch.update(tag_pks: [tags[1].id, tags[3].id])
+  ch.update(tag_pks: [desc_tags[1].id, service_tags[1].id])
   Choice.create(stem: 'No', question: q2, next_question: q3)
 
   q1 = Question.create(stem: 'Are you HIV positive?', order: 1)
   ch = Choice.create(stem: 'Yes', question: q1, next_question: q2)
-  ch.update(tag_pks: [tags[0].id, tags[3].id])
+  ch.update(tag_pks: [desc_tags[0].id, service_tags[1].id])
   Choice.create(stem: 'No', question: q1, next_question: q2)
 
 end

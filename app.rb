@@ -73,6 +73,10 @@ class EhrAPI < EhrApiBase
       r.run WizardRoutes
     end
 
+    r.on 'demo' do
+      r.run DemoRoutes
+    end
+
     r.on 'config' do
       r.run ConfigRoutes
     end

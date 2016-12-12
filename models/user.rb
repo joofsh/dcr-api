@@ -44,14 +44,22 @@ class User < Sequel::Model
   # and faster.
   def resource_map
     @resource_map ||= begin
-
-      resource_map = tags_dataset.service.order_by_weight.reduce({}) do |hash, service_tag|
+      tags_dataset.service.order_by_weight.reduce({}) do |hash, service_tag|
         hash[service_tag.name.to_sym] =
           Resource.sorted_by_descriptor_weight(service_tag).all
         hash
       end
+    end
+  end
 
-      resource_map
+  # Master list of all resources. Used for demo purposes
+  def self.master_resource_map
+    @master_resource_map ||= begin
+      Tag.service.order_by_weight.reduce({}) do |hash, service_tag|
+        hash[service_tag.name.to_sym] =
+          Resource.sorted_by_descriptor_weight(service_tag).all
+        hash
+      end
     end
   end
 
