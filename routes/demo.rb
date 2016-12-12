@@ -5,7 +5,7 @@ class DemoRoutes < EhrApiBase
     r.get 'wizard/resources' do
       {
         user: (Guest.first || Guest.create).present(params),
-        resources: User.master_resource_map.reduce({}) do |hash, (tag, resources)|
+        resources: Hash[User.master_resource_map.first(5)].reduce({}) do |hash, (tag, resources)|
           hash[tag] = resources.map { |r| r.present(params) }
           hash
         end
