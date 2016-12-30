@@ -1,3 +1,11 @@
+GIT
+  remote: git@github.com:phoffer/newrelic-roda.git
+  revision: 389f9c252633a4879b27298dcf249233e5f7e483
+  specs:
+    newrelic-roda (1.1.0)
+      newrelic_rpm (~> 3.14, >= 3.14.0.305)
+      roda (~> 2.8)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -25,6 +33,7 @@ GEM
       minitest (>= 5.0)
       ruby-progressbar
     multi_xml (0.5.5)
+    newrelic_rpm (3.17.2.327)
     pg (0.18.4)
     pry (0.10.3)
       coderay (~> 1.1.0)
@@ -71,6 +80,8 @@ DEPENDENCIES
   httparty
   minitest
   minitest-reporters
+  newrelic-roda!
+  newrelic_rpm
   pg
   pry
   pry-byebug
