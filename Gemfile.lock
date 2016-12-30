@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:phoffer/newrelic-roda.git
+  remote: https://github.com/phoffer/newrelic-roda.git
   revision: 389f9c252633a4879b27298dcf249233e5f7e483
   specs:
     newrelic-roda (1.1.0)
