@@ -1,8 +1,6 @@
-require 'rack/contrib'
-require 'shield'
-require 'roda'
-require 'rack/indifferent'
-require 'json'
+require 'bundler'
+Bundler.require(:default, ENV['RACK_ENV'].to_sym)
+Dotenv.load
 
 def development?
   ENV['RACK_ENV'] == 'development'
@@ -12,16 +10,7 @@ def test?
   ENV['RACK_ENV'] == 'test'
 end
 
-require 'dotenv'
-Dotenv.load
-
-if development?
-  require 'pry'
-  require 'awesome_print'
-end
-
 require './config/db'
-
 
 Dir['./lib/**/*.rb'].each { |file| require file }
 Dir['./models/**/*.rb'].each { |file| require file }
