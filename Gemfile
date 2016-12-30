@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'roda'
 gem 'newrelic_rpm'
-gem 'newrelic-roda', git: 'git@github.com:phoffer/newrelic-roda.git'
+gem 'newrelic-roda', git: 'https://github.com/phoffer/newrelic-roda.git'
 gem 'rack-indifferent'
 gem 'rack-contrib'
 gem 'sequel'
