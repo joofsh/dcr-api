@@ -40,9 +40,16 @@ def build_dummy_data
     end
   end
 
+  # Make questions
+  questions = 50.times.map { |i| Question.create(stem: "Are you interested in #{i}?") }
+  49.times do |i|
+    c1 = Choice.create(stem: 'Yes', question: questions[i], next_question: questions[i+1])
+    c2 = Choice.create(stem: 'No', question: questions[i], next_question: questions[i+1])
+  end
+
   q3 = Question.create(stem: 'Do you have a stable home residence?', order: 3)
-  Choice.create(stem: 'Yes', question: q3)
-  ch = Choice.create(stem: 'No', question: q3)
+  Choice.create(stem: 'Yes', question: q3, next_question: questions[0])
+  ch = Choice.create(stem: 'No', question: q3, next_question: questions[0])
   ch.update(tag_pks: [desc_tags[2].id, service_tags[0].id])
 
   q2 = Question.create(stem: 'Are you actively taking narcotic?', order: 2)

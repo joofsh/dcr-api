@@ -1,5 +1,6 @@
 .env
 logfile
+log/
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
