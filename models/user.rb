@@ -37,7 +37,7 @@ class User < Sequel::Model
   end
 
   def questions_dataset
-    Question.ordered
+    Question.ordered_for_wizard
   end
 
   # TODO: Refactor this. Needs to become a lot more sophisticated

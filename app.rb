@@ -1,6 +1,7 @@
 require 'bundler'
-Bundler.require(:default, ENV['RACK_ENV'].to_sym)
+require 'dotenv'
 Dotenv.load
+Bundler.require(:default, ENV['RACK_ENV'].to_sym)
 
 def development?
   ENV['RACK_ENV'] == 'development'
@@ -28,13 +29,16 @@ class EhrApiBase < Roda
   plugin :json, :classes=>[Array, Hash, Sequel::Model]
   plugin :halt
   plugin :error_handler do |e|
-    {
+    error = {
       exception: {
         error: e.class,
         details: e.message,
         backtrace: e.backtrace
       }
     }
+    p e.message
+    e.backtrace.each { |b| p b }
+    error
   end
 
   def params

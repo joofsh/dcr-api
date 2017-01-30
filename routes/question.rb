@@ -21,7 +21,17 @@ class QuestionRoutes < EhrApiBase
     end
 
     r.get do
-      paginated(:questions, Question.dataset.ordered_by_created_at)
+      dataset = Question.dataset
+
+      # Set order based on order param
+      # defaults to created_at
+      dataset = if params[:order] == 'wizard'
+        dataset.ordered_for_wizard
+      else
+         dataset.ordered_by_created_at
+      end
+
+      paginated(:questions, dataset)
     end
 
     r.post do

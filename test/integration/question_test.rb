@@ -30,6 +30,24 @@ describe 'Questions' do
       assert question.key? :choices
     end
 
+    it 'accepts length param' do
+      get '/questions?length=1'
+
+      assert_equal 200, status
+      assert body.key? :questions
+
+      assert_equal 1, body[:count]
+    end
+
+    it 'accepts order param' do
+      get '/questions?order=wizard'
+
+      assert_equal 200, status
+      assert body.key? :questions
+
+      assert_equal Question.ordered_for_wizard.first.id, body[:questions][0][:id]
+    end
+
     it 'orders them by created_at' do
       Question.each(&:destroy)
       q1 = Question.spawn!(category: 'Education', order: 1)

@@ -37,7 +37,7 @@ class Question < Sequel::Model
       order_prepend(Sequel.asc(:created_at))
     end
 
-    def ordered
+    def ordered_for_wizard
       order_by_order.order_by_category
     end
 
@@ -52,7 +52,7 @@ class Question < Sequel::Model
       question = if response && response.choice.next_question
         response.choice.next_question
       else
-        exclude_answered_by(user).ordered.first
+        exclude_answered_by(user).ordered_for_wizard.first
       end
     end
   end

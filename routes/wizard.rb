@@ -12,7 +12,8 @@ class WizardRoutes < EhrApiBase
       end
 
       r.get 'current_question' do
-        { question: Question.current_for_user(user).present }
+        question = Question.current_for_user(user)
+        { question: question && question.present }
       end
 
       r.get 'resources' do
