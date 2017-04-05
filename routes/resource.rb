@@ -1,8 +1,8 @@
 class ResourceRoutes < EhrApiBase
   route do |r|
     r.on ':id' do |resource_id|
-      params[:resource_id] = resource_id
-      resource = Resource[resource_id] || not_found!
+      id = params[:resource_id] = resource_id.to_i
+      resource = Resource[id] || not_found!
 
       r.get do
         resource.present(params)

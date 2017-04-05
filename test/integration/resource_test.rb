@@ -43,6 +43,20 @@ describe "Resources" do
     end
   end
 
+  describe 'GET /resources/:id' do
+    it 'does not require a token' do
+      get "/resources/#{@resource.id}"
+
+      assert_equal 200, status
+      assert @resource.id, body[:id]
+    end
+
+    it 'returns 404 on bad id' do
+      get "/resources/asadfkj"
+      assert_equal 404, status
+    end
+  end
+
   describe 'POST /resources' do
     before do
       @attrs = {
